@@ -1,0 +1,40 @@
+{% extends "base/index.html" %}
+
+{% block content %}
+<div class="col-lg-12">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-4">
+                    Les techniques
+                    <select class="form-control col-lg-12" id="searchCondition1" style="margin:2px 7px 2px 7px">
+                        <option id="Con1Blank" value=""></option>
+                        <option id="Con1Technique" value="Con1Technique">Une technique</option>
+                        <option id="Con1TypeTache" value="Con1TypeTache">Un type de tâches</option> 
+                        <option id="Con1Etudiant" value="Con1Etudiant">Un étudiant</option>
+                    </select>
+                </div>
+                <div class="col-lg-4">
+                    Les étudiants
+                    <select class="form-control col-lg-12" id="searchCondition1" style="margin:2px 7px 2px 7px">
+                        <option id="Con1Blank" value=""></option>
+                        <option id="Con1Technique" value="Con1Technique">Une technique</option>
+                        <option id="Con1TypeTache" value="Con1TypeTache">Un type de tâches</option> 
+                        <option id="Con1Etudiant" value="Con1Etudiant">Un étudiant</option>
+                    </select>
+                </div>
+                <div class="col-lg-4">
+                    Les groups/classe
+                    <select class="form-control col-lg-12" id="searchCondition1" style="margin:2px 7px 2px 7px">
+                        <option id="Con1Blank" value=""></option>
+                        <option id="Con1Technique" value="Con1Technique">Une technique</option>
+                        <option id="Con1TypeTache" value="Con1TypeTache">Un type de tâches</option> 
+                        <option id="Con1Etudiant" value="Con1Etudiant">Un étudiant</option>
+                    </select>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

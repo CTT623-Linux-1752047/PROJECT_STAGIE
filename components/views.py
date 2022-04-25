@@ -4,14 +4,14 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.template import RequestContext
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 def home(request):
-   
-    # if :
-    #     return render(request, "basic/index.html")
-    # else : 
-    return render(request, "authentication/signin.html")
+    if request.user.is_authenticated:
+        return render(request, 'statistique/index.html')
+    else :
+        return render(request, "authentication/signin.html")
 
 def signup(request):
 
@@ -36,6 +36,7 @@ def signup(request):
 
     return render(request, "authentication/signup.html")
 
+@csrf_exempt
 def signin(request):
 
     if request.method == 'POST':
@@ -46,9 +47,7 @@ def signin(request):
 
         if user is not None:
             login(request, user)
-            fname = user.first_name
-            return redirect('index')
-
+            return redirect('home')
         else:
             messages.error(request, "Bad Credentials!")
             return redirect('signup')
@@ -59,9 +58,3 @@ def signout(request):
     logout(request) 
     messages.success(request, "Logged Out Successfully!")
     return redirect('home') 
-  
-def mainDashboard(request):
-    if request.user.is_authenticated: 
-        render(request, "base/index.html")
-    else: 
-        render(request, "authentication/signin.html")

@@ -19,9 +19,9 @@
     function draw() {
         var config = {
             container_id: "viz",
-            server_url: "bolt://44.192.111.77:7687",
+            server_url: "bolt://34.236.245.232:7687",
             server_user: "neo4j",
-            server_password: "tools-wonder-surveys",
+            server_password: "discard-adherence-receptacles",
             labels: {
                 
             },
@@ -167,15 +167,15 @@
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <a href="./app-profile.html" class="dropdown-item">
                                         <i class="icon-user"></i>
-                                        <span class="ml-2">Profile </span>
+                                        <span class="ml-2">Profil </span>
                                     </a>
                                     <a href="./email-inbox.html" class="dropdown-item">
                                         <i class="icon-envelope-open"></i>
                                         <span class="ml-2">Inbox </span>
                                     </a>
-                                    <a href="./page-login.html" class="dropdown-item">
+                                    <a href="{% url 'signout' %}" class="dropdown-item">
                                         <i class="icon-key"></i>
-                                        <span class="ml-2">Logout </span>
+                                        <span class="ml-2">Déconnecter </span>
                                     </a>
                                 </div>
                             </li>
@@ -194,31 +194,27 @@
         <div class="quixnav">
             <div class="quixnav-scroll">
                 <ul class="metismenu" id="menu">
-                    <li class="nav-label first">Main Menu</li>
-                    <!-- <li><a href="index.html"><i class="icon icon-single-04"></i><span class="nav-text">Dashboard</span></a>
-                    </li> -->
-                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
-                                class="icon icon-single-04"></i><span class="nav-text">Dashboard</span></a>
+                    <li><a class="" href="javascript:void()" onClick="return redirectTo('')" aria-expanded="false">
+                        <span class="success"><i class="ti-clipboard"></i></span> 
+                            <span class="nav-text"> &nbsp; &nbsp; Tableau de board</span></a>
+                    </li>
+                 
+                    <li><a class="" id="Exploitation" href="javascript:void()" onClick="return redirectTo('exploitation/index')" aria-expanded="false">
+                        <span class="success"><i class="ti-bar-chart"></i></span> 
+                        <span class="nav-text">&nbsp; &nbsp; Exploitation des données</span></a>
+                    </li>
+
+                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                        <span class="success"><i class="ti-server"></i></span> 
+                        <span class="nav-text">&nbsp; &nbsp; Gestion des données</span></a>
                         <ul aria-expanded="false">
-                            <li><a href="./index.html">Dashboard 1</a></li>
-                            <li><a href="./index2.html">Dashboard 2</a></li>
+                            <li><a href="./app-profile.html">Importer</a></li>
                         </ul>
                     </li>
 
-                    <li class="nav-label">Apps</li>
-                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
-                                class="icon icon-app-store"></i><span class="nav-text">Apps</span></a>
-                        <ul aria-expanded="false">
-                            <li><a href="./app-profile.html">Profile</a></li>
-                            <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">Email</a>
-                                <ul aria-expanded="false">
-                                    <li><a href="./email-compose.html">Compose</a></li>
-                                    <li><a href="./email-inbox.html">Inbox</a></li>
-                                    <li><a href="./email-read.html">Read</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="./app-calender.html">Calendar</a></li>
-                        </ul>
+                    <li><a class="" href="javascript:void()" aria-expanded="false">
+                        <span class="success"><i class="ti-user"></i></span> 
+                        <span class="nav-text">&nbsp; &nbsp; Gestion des utilisateurs</span></a>
                     </li>
                 </ul>
             </div>
@@ -232,53 +228,8 @@
         ***********************************-->
         <div class="content-body">
             <div class="container-fluid">
-                    <div class="col-lg-12">
-                        <div id="accordion-ten" class="accordion accordion-header-shadow accordion-rounded">
-                            <div class="accordion__item">
-                                <div class="accordion__header collapsed accordion__header--primary" data-toggle="collapse" data-target="#header-shadow_collapseOne">
-                                    <span class="accordion__header--icon"></span>
-                                    <span class="accordion__header--text">Accordion Header One</span>
-                                    <span class="accordion__header--indicator"></span>
-                                </div>
-                                <div id="header-shadow_collapseOne" class="collapse accordion__body show" data-parent="#accordion-ten">
-                                    <div class="accordion__body--text">
-                                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod.
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="accordion__item">
-                                <div class="accordion__header collapsed accordion__header--success" data-toggle="collapse" data-target="#header-shadow_collapseThree">
-                                    <span class="accordion__header--icon"></span>
-                                    <span class="accordion__header--text">Accordion Header Three</span>
-                                    <span class="accordion__header--indicator"></span>
-                                </div>
-                                <div id="header-shadow_collapseThree" class="collapse accordion__body" data-parent="#accordion-ten">
-                                    <div class="accordion__body--text">
-                                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod.
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title">Graph data </h4>
-                                <select class="form-select" aria-label="Disabled select example" disabled>
-                                    <option selected>Open this select menu</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
-                                </select>
-                            </div>
-                            <div class="card-body">
-                                <div id="viz"></div>
-                            </div>
-                            {% comment %} <div class="card-footer">
-                                Card footer
-                            </div> {% endcomment %}
-                        </div>
-                    </div>
+            {% block content %}
+            {% endblock %}
             </div>
         </div>
         <!--**********************************
@@ -319,8 +270,20 @@
     <script src="{% static 'vendor/global/global.min.js' %}"></script>
     <script src="{% static 'js/quixnav-init.js' %}"></script>
     <script src="{% static 'js/custom.min.js' %}"></script>
-
+   
     <script src="{% static 'vendor/highlightjs/highlight.pack.min.js' %}"></script>
+    {% block script %}
+    {% endblock %}
+
+    <script type="text/javascript">
+        function redirectTo(str){
+            url = window.location.href
+            endStr = String(url).indexOf('/', 7)
+            window.location.href = url.slice(0,endStr) + '/' + str
+        }
+
+        
+    </script>
     <!-- Circle progress -->
 
 </body>
