@@ -1,15 +1,29 @@
 from django.shortcuts import redirect, render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
+from components.models.technique import Technique
 
 # Create your views here.
 def home(request):
     if request.user.is_authenticated:
-        return render(request, 'statistique/index.html')
+       
+        try:
+            techniques = Technique.nodes.all()
+            response = []
+            for technique in techniques :
+                obj = {
+                    "techniqueCd": technique.techniqueCd,
+                    "techniqueName": technique.techniqueName,
+                }
+                response.append(obj)
+        except:
+            response = {"error": "Error occurred"}
+      
+        return render(request, 'statistique/index.html', {'lstTechniques': JsonResponse(response, safe=False)})
     else :
         return render(request, "authentication/signin.html")
 

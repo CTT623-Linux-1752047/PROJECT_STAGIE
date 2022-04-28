@@ -7,11 +7,17 @@
             <div class="row">
                 <div class="col-lg-4">
                     Les techniques
+                    <div class="col-lg-12">
+                        
+                        {% for techniqueCd, techniqueName in lstTechniques.Technique %}
+                        {{ techniqueName }}<br />
+                        {% endfor %}
+                    </div>
                     <select class="form-control col-lg-12" id="searchCondition1" style="margin:2px 7px 2px 7px">
                         <option id="Con1Blank" value=""></option>
-                        <option id="Con1Technique" value="Con1Technique">Une technique</option>
-                        <option id="Con1TypeTache" value="Con1TypeTache">Un type de tâches</option> 
-                        <option id="Con1Etudiant" value="Con1Etudiant">Un étudiant</option>
+                       
+                           
+                       
                     </select>
                 </div>
                 <div class="col-lg-4">
