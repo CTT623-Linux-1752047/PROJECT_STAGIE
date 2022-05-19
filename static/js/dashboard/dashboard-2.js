@@ -3,7 +3,7 @@
 
 
     var data = {
-        labels: ['facebook', 'twitter', 'youtube', 'google plus'],
+        labels: ['Maîtrise', 'Acquis', 'En cours'],
         series: [{
                     value: 20,
                     className: "bg-facebook"
@@ -15,11 +15,7 @@
                 {
                     value: 30,
                     className: "bg-youtube"
-                },
-                {
-                    value: 40,
-                    className: "bg-google-plus"
-                }
+                },            
             ]
             //        colors: ["#333", "#222", "#111"]
     };

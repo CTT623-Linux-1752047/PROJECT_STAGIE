@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import redirect, render
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.models import User
@@ -6,24 +7,93 @@ from django.contrib.auth import authenticate, login, logout
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from components.models.technique import Technique
-
+from components.models.student import Student
+from components.models.group import Group
+from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
+
+@csrf_exempt
 def home(request):
     if request.user.is_authenticated:
-       
+        if request.method == "POST" : 
+          
+            searchCondition1 = request.POST.get("searchCondition1")
+            searchCondition2 = request.POST.get("searchCondition2")
+            searchCondition3 = request.POST.get("searchCondition3")
+            
+            result = False
+            
+            if searchCondition1 != "" :
+                lstGroupByTech = Technique.getGroupCodeByTechnique(searchCondition1)
+                if len(lstGroupByTech) > 0 : 
+                    lstDataBarChartEnCours = []
+                    lstDataBarChartAcquis = []
+                    lstDataBarChartMatrise = []
+                    
+                    for group in lstGroupByTech[0]: 
+                        lstDataBarChartEnCours.append(Technique.cntStudentByTechniqueAndGroup(searchCondition1,group,"L1"))
+                        lstDataBarChartAcquis.append(Technique.cntStudentByTechniqueAndGroup(searchCondition1,group,"L2"))
+                        lstDataBarChartMatrise.append(Technique.cntStudentByTechniqueAndGroup(searchCondition1,group,"L3"))
+                        
+                    lstGroupByTech.append(lstDataBarChartEnCours)
+                    lstGroupByTech.append(lstDataBarChartAcquis)
+                    lstGroupByTech.append(lstDataBarChartMatrise)
+                
+                result =  {
+                    "techCode" : searchCondition1,
+                    "pieChart" : [Technique.cntTechFollowLevelByID(searchCondition1,"L1"), # en cours
+                                  Technique.cntTechFollowLevelByID(searchCondition1, "L2"), # acquis
+                                  Technique.cntTechFollowLevelByID(searchCondition1, "L3")],  # maîtrise     
+                    "barChart" : lstGroupByTech
+                }   
+            return JsonResponse({"response": result}, status=200)
         try:
             techniques = Technique.nodes.all()
-            response = []
+            lstTech = []
             for technique in techniques :
                 obj = {
                     "techniqueCd": technique.techniqueCd,
                     "techniqueName": technique.techniqueName,
                 }
-                response.append(obj)
+                lstTech.append(obj)
+                
+            groups = Group.nodes.all()
+            lstGroup = []
+            for group in groups : 
+                obj = {
+                    "groupCd": group.groupCd,
+                    "groupName": group.groupName,
+                }
+                lstGroup.append(obj)
+            
+            students = Student.nodes.all()
+            lstStudent = []
+            for student in students: 
+                obj = {
+                    "studentCd": student.studentCd,
+                    "fullNameStudent": student.fullNameStudent,
+                }
+                lstStudent.append(obj)
+                
+            relationshipTech = {
+                "hasConcurrencyByExtension" : Technique.countRelationship("hasConcurrencyByExtension"),
+                "hasPartialConcurrency" : Technique.countRelationship("hasPartialConcurrency"),
+                "hasGlobalConcurrency" : Technique.countRelationship("hasGlobalConcurrency"),}
+            relationStudent = {
+                "enCours" : Student.countStudentByLevel("L1"),
+                "Acquis" : Student.countStudentByLevel("L2"),
+                "Maitrise" : Student.countStudentByLevel("L3"),
+            }
         except:
             response = {"error": "Error occurred"}
       
-        return render(request, 'statistique/index.html', {'lstTechniques': JsonResponse(response, safe=False)})
+        return render(request, 'statistique/index.html', {
+                                                            'lstTechniques': lstTech, 
+                                                            'lstStudent' : lstStudent, 
+                                                            'lstGroup': lstGroup,
+                                                            'relationshipTech' :  relationshipTech,
+                                                            'relationshipStudent' : relationStudent
+                                                        })
     else :
         return render(request, "authentication/signin.html")
 
