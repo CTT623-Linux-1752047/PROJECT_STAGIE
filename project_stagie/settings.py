@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure--cxp&)d6)abksd)+v@)p_@m&@o+zmw6-)c_gz-u@(!(y_4p#(c
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 NEOMODEL_NEO4J_BOLT_URL = os.environ.get('NEO4J_BOLT_URL', 'bolt://neo4j:123@localhost:7687')
 

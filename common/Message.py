@@ -1,0 +1,15 @@
+
+class Message :  
+    MSG_001 = "sheet {0} : Column A : Row {1} has empty value. "
+    MSG_002 = "Column of variable'Task Type is not macth with row of sheet Variable. "
+    MSG_003 = "Sub task type {0} isn't exist with task type. "
+    MSG_004 = "Code variable {0} of sheet Variable Value isn't exist in code of sheet Variable. "
+    MSG_005 = "Code task type {0} of sheet Technique isn't exist in code of sheet Task Type. "
+    MSG_006 = "Code technique concurency global {0} isn't exist in code of sheet Technique. "
+    MSG_007 = "Code technique concurency partial {0} isn't exist in code of sheet Technique. "
+    MSG_008 = "Code technique concurency extension {0} isn't exist in code of sheet Technique. "
+    MSG_009 = "Code Group {0} of sheet Student isn't exist in code of sheet Group. "
+    MSG_010 = "Cell {0} has code of Student in sheet LocalInsInfo isn't exist code in of sheet Student. "
+    MSG_011 = "Cell {0} has code of Level in sheet LocalInsInfo isn't exist code in of sheet Level. "
+    MSG_012 = "Cell {0} has code of Technique in sheet LocalInsInfo isn't exist code in of sheet Technique."
+    MSG_013 = "Le  fichier a disparu un sheetname in [ Variable, Variable Value, Task Type, Technique, Level, Student, Group, LocalInsInfo]."

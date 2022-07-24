@@ -70,10 +70,7 @@ let dataSet = [
         createdRow: function ( row, data, index ) {
             $(row).addClass('selected')
         },
-
-        "scrollY":        "42vh",
-        "scrollCollapse": true,
-        "paging":         false
+        "searching": false,
     });
 
     table2.on('click', 'tbody tr', function() {

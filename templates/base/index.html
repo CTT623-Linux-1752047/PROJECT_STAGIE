@@ -182,7 +182,7 @@
                             <span class="nav-text"> &nbsp; &nbsp; Tableau de board</span></a>
                     </li>
                  
-                    <li><a class="" id="Exploitation" href="javascript:void()" onClick="return redirectTo('exploitation/index')" aria-expanded="false">
+                    <li><a class="" id="Exploitation" href="javascript:void()" onClick="return redirectTo('exploitation')" aria-expanded="false">
                         <span class="success"><i class="ti-bar-chart"></i></span> 
                         <span class="nav-text">&nbsp; &nbsp; Exploitation des données</span></a>
                     </li>
@@ -191,7 +191,7 @@
                         <span class="success"><i class="ti-server"></i></span> 
                         <span class="nav-text">&nbsp; &nbsp; Gestion des données</span></a>
                         <ul aria-expanded="false">
-                            <li><a href="./app-profile.html">Importer</a></li>
+                            <li><a href="{% url 'importer' %}">Importer</a></li>
                         </ul>
                     </li>
 

@@ -67,9 +67,39 @@
 
 #viz {
   width: 100%;
-  height: 400px;
+  height: 700px;
   font: 22pt arial;
 }
+
+.ct-series-a .ct-bar,
+.ct-series-a .ct-line,
+.ct-series-a .ct-point,
+.ct-series-a .ct-slice-donut {
+  stroke: #ff0000 !important;
+}
+
+.select2-selection__rendered li{
+  color: black !important;
+}
+
+.ct-series-b .ct-bar,
+.ct-series-b .ct-line,
+.ct-series-b .ct-point,
+.ct-series-b .ct-slice-donut {
+  stroke: #2bff00 !important;
+}
+
+.ct-series-c .ct-bar,
+.ct-series-c .ct-line,
+.ct-series-c .ct-point,
+.ct-series-c .ct-slice-donut {
+  stroke: #2451ff !important;
+}
+
+table.dataTable tr.odd { background-color: 	#ffe4c0 !important; }
+table.dataTable tr.even { background-color: white !important; }
+table.dataTable tr { color: #010101}
+
 .gradient_one {
   background-image: linear-gradient(to right, rgba(186, 1, 181, 0.85) 0%, rgba(103, 25, 255, 0.85) 100%); }
 
@@ -13191,6 +13221,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
   display: inline-block;
   opacity: 0;
   min-width: 0.625rem;
+  max-width: 300px !important;
   padding: 2px 0.625rem;
   border-radius: 3px;
   background: #313a46;
@@ -15168,7 +15199,7 @@ button {
   background: #fff;
   border-radius: 10rem;
   display: inline-block;
-  margin: -.5rem 1.3rem -.5rem -1.5rem;
+  margin: -.5rem 1.3rem -.5rem -2.5rem;
   padding: .5rem 1rem .6rem; }
 
 .toggle-dropdown::after {

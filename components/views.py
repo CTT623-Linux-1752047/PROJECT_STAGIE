@@ -17,85 +17,192 @@ def home(request):
     if request.user.is_authenticated:
         if request.method == "POST" : 
           
-            searchCondition1 = request.POST.get("searchCondition1")
-            searchCondition2 = request.POST.get("searchCondition2")
-            searchCondition3 = request.POST.get("searchCondition3")
+            searchCondition = request.POST.get("searchCondition")
+            typeSearch = request.POST.get("typeSearch")
             
             result = False
             
-            if searchCondition1 != "" :
-                lstGroupByTech = Technique.getGroupCodeByTechnique(searchCondition1)
-                if len(lstGroupByTech) > 0 : 
+            if typeSearch == "TE" :
+                if searchCondition != "" :
+                    lstGroupByTech = Technique.getGroupCodeByTechnique(searchCondition)
+    
+                    if len(lstGroupByTech) > 0 : 
+                        lstDataBarChartEnCours = []
+                        lstDataBarChartAcquis = []
+                        lstDataBarChartMatrise = []
+                        
+                        for group in lstGroupByTech[0]: 
+                            lstDataBarChartEnCours.append(Technique.cntStudentByTechniqueAndGroup(searchCondition,group,"L1"))
+                            lstDataBarChartAcquis.append(Technique.cntStudentByTechniqueAndGroup(searchCondition,group,"L2"))
+                            lstDataBarChartMatrise.append(Technique.cntStudentByTechniqueAndGroup(searchCondition,group,"L3"))
+                            
+                        lstGroupByTech.append(lstDataBarChartEnCours)
+                        lstGroupByTech.append(lstDataBarChartAcquis)
+                        lstGroupByTech.append(lstDataBarChartMatrise)
+                        
+                    techName = Technique.nodes.get(techniqueCd=searchCondition)
+                    result =  {
+                        "type" : "TE",
+                        "code" : searchCondition,
+                        "name" : techName.techniqueName,
+                        "pieChart" : [Technique.cntTechFollowLevelByID(searchCondition,"L1"), # en cours
+                                    Technique.cntTechFollowLevelByID(searchCondition, "L2"), # acquis
+                                    Technique.cntTechFollowLevelByID(searchCondition, "L3")],  # maîtrise     
+                        "barChart" : lstGroupByTech
+                    }   
+            
+            if typeSearch == "ST" :
+                if searchCondition != "": 
+                    studentName = Student.nodes.get(studentCd=searchCondition)
+                    datatable = []
+                    for level in ["L1","L2","L3"]:
+                        for item in Student.getTechOfStFollowLevelByID(searchCondition, level)[1]:
+                            obj = {
+                                "techName" : item,
+                                "level" : level
+                            }
+                            datatable.append(obj)
+                        
+                    result =  {
+                        "type" : "ST",
+                        "code" : searchCondition,
+                        "name" : studentName.fullNameStudent,
+                        "pieChart" : [len(Student.getTechOfStFollowLevelByID(searchCondition, "L1")[0]), # en cours
+                                    len(Student.getTechOfStFollowLevelByID(searchCondition, "L2")[0]), # acquis
+                                    len(Student.getTechOfStFollowLevelByID(searchCondition, "L3")[0])], # maîtrise     
+                        "datatable" : datatable
+                    }   
+                    
+            if typeSearch == "GR" :
+                if searchCondition != "": 
+                    allStudentInGroup = Student.cntStudentByGroupe(searchCondition)
+                    cntTechL1 = 0
+                    cntTechL2 = 0
+                    cntTechL3 = 0
+                    lstTech = Technique.getTechByGroupe(searchCondition)
                     lstDataBarChartEnCours = []
                     lstDataBarChartAcquis = []
-                    lstDataBarChartMatrise = []
-                    
-                    for group in lstGroupByTech[0]: 
-                        lstDataBarChartEnCours.append(Technique.cntStudentByTechniqueAndGroup(searchCondition1,group,"L1"))
-                        lstDataBarChartAcquis.append(Technique.cntStudentByTechniqueAndGroup(searchCondition1,group,"L2"))
-                        lstDataBarChartMatrise.append(Technique.cntStudentByTechniqueAndGroup(searchCondition1,group,"L3"))
+                    lstDataBarChartMatrise = [] 
+                    for item in lstTech[0]:
+                        techName = Technique.nodes.get(techniqueCd=item)
+                        tmp1 = Technique.cntStudentByTechAndGroupAndLevel(item,searchCondition,"L1")
+                        tmp2 = Technique.cntStudentByTechAndGroupAndLevel(item,searchCondition,"L2")
+                        tmp3 = Technique.cntStudentByTechAndGroupAndLevel(item,searchCondition,"L3")
+                        if tmp1 / allStudentInGroup < 0.8 : 
+                            cntTechL1 = cntTechL1 + 1
+                        if tmp2 / allStudentInGroup < 0.8 : 
+                            cntTechL2 = cntTechL2 + 1
+                        if tmp3 / allStudentInGroup < 0.8 : 
+                            cntTechL3 = cntTechL3 + 1
                         
-                    lstGroupByTech.append(lstDataBarChartEnCours)
-                    lstGroupByTech.append(lstDataBarChartAcquis)
-                    lstGroupByTech.append(lstDataBarChartMatrise)
+                        objL1 = {
+                            "meta": techName.techniqueName + " - ", 
+                            "value": tmp1
+                        }
+                        lstDataBarChartEnCours.append(objL1)
+                        
+                        objL2 = {
+                            "meta": techName.techniqueName  + " - ", 
+                            "value": tmp2
+                        }
+                        lstDataBarChartAcquis.append(objL2)
+                        
+                        objL3 = {
+                            "meta": techName.techniqueName  + " - ", 
+                            "value": tmp3
+                        }
+                        lstDataBarChartMatrise.append(objL3)
+                           
+                    lstTech.append(lstDataBarChartEnCours)
+                    lstTech.append(lstDataBarChartAcquis)
+                    lstTech.append(lstDataBarChartMatrise) 
+                        
+                    result =  {
+                        "type" : "GR",
+                        "code" : searchCondition,
+                        "name" : "",
+                        "pieChart" : [cntTechL1, # en cours
+                                    cntTechL2, # acquis
+                                    cntTechL3], # maîtrise     
+                        "barChart" : lstTech
+                    }
                 
-                result =  {
-                    "techCode" : searchCondition1,
-                    "pieChart" : [Technique.cntTechFollowLevelByID(searchCondition1,"L1"), # en cours
-                                  Technique.cntTechFollowLevelByID(searchCondition1, "L2"), # acquis
-                                  Technique.cntTechFollowLevelByID(searchCondition1, "L3")],  # maîtrise     
-                    "barChart" : lstGroupByTech
-                }   
+            if typeSearch == "STech": 
+                result =  Technique.getTechByGroupe(request.POST.get("idGroupe")) 
+                
+            if typeSearch == "STable" :
+                if request.POST.get("idGroupe"):
+                    lstStudent = Student.getStudentByGroupe(request.POST.get("idGroupe"))
+                    result = []
+                    for item in lstStudent: 
+                        tmp = [item[0], item[1]]
+                        if request.POST.get("idTech"):
+                            lstTech = request.POST.get("idTech").split(",")
+                            for tech in lstTech:
+                                record = Technique.getLevelByTechStudent(item[0], tech)
+                                #tmp.append(record)
+                                if record == False: 
+                                    tmp.append("-")
+                                if record == "L1": 
+                                    tmp.append("<span class=\"badge badge-pill \" style=\"background-color: #ff0000; color: white\">En cours</span>")
+                                if record == "L2":
+                                    tmp.append("<span class=\"badge badge-pill \" style=\"background-color: #2bff00; color: white\">Acquis</span>")
+                                if record == "L3":
+                                    tmp.append("<span class=\"badge badge-pill \" style=\"background-color: #2451ff; color: white\">Maîtrise</span>")
+                                
+                        result.append(tmp)
+                               
+                result = result   
             return JsonResponse({"response": result}, status=200)
-        try:
+      
+        return render(request, 'statistique/index.html', {  'lstTechniques' : len(Technique.nodes.all()),
+                                                            'lstStudent' : len(Student.nodes.all()),
+                                                            'lstGroup' : len(Group.nodes.all()),                              
+                                                        })
+    else :
+        return render(request, "authentication/signin.html")
+
+@csrf_exempt
+def getData(request):
+    try: 
+        data = []
+        
+        if request.GET.get("type") == "TE" : 
             techniques = Technique.nodes.all()
-            lstTech = []
             for technique in techniques :
                 obj = {
                     "techniqueCd": technique.techniqueCd,
                     "techniqueName": technique.techniqueName,
                 }
-                lstTech.append(obj)
-                
-            groups = Group.nodes.all()
-            lstGroup = []
-            for group in groups : 
-                obj = {
-                    "groupCd": group.groupCd,
-                    "groupName": group.groupName,
-                }
-                lstGroup.append(obj)
-            
+                data.append(obj)
+        elif request.GET.get("type") == "ST" : 
             students = Student.nodes.all()
-            lstStudent = []
             for student in students: 
                 obj = {
                     "studentCd": student.studentCd,
                     "fullNameStudent": student.fullNameStudent,
                 }
-                lstStudent.append(obj)
+                data.append(obj) 
+        else : 
+            groups = Group.nodes.all()
+            for group in groups : 
+                obj = {
+                    "groupCd": group.groupCd,
+                    "groupName": group.groupName,
+                }
+                data.append(obj)
                 
-            relationshipTech = {
-                "hasConcurrencyByExtension" : Technique.countRelationship("hasConcurrencyByExtension"),
-                "hasPartialConcurrency" : Technique.countRelationship("hasPartialConcurrency"),
-                "hasGlobalConcurrency" : Technique.countRelationship("hasGlobalConcurrency"),}
-            relationStudent = {
-                "enCours" : Student.countStudentByLevel("L1"),
-                "Acquis" : Student.countStudentByLevel("L2"),
-                "Maitrise" : Student.countStudentByLevel("L3"),
-            }
-        except:
-            response = {"error": "Error occurred"}
-      
-        return render(request, 'statistique/index.html', {
-                                                            'lstTechniques': lstTech, 
-                                                            'lstStudent' : lstStudent, 
-                                                            'lstGroup': lstGroup,
-                                                            'relationshipTech' :  relationshipTech,
-                                                            'relationshipStudent' : relationStudent
-                                                        })
-    else :
-        return render(request, "authentication/signin.html")
+        return JsonResponse({"data": data}, status=200)    
+    except:
+        response = {"error": "Error occurred"}
+
+def getListTechByGroup(request):
+    try: 
+        result = []
+        
+        return result
+    except: 
+        return False
 
 def signup(request):
 
@@ -136,7 +243,6 @@ def signin(request):
             messages.error(request, "Bad Credentials!")
             return redirect('signup')
     return render(request, "authentication/signin.html")
-
 
 def signout(request):
     logout(request) 

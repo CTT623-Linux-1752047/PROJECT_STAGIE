@@ -2,7 +2,10 @@
 {% load static %}
 {% block stylesheet %}
 <link rel="stylesheet" href="{% static 'vendor/select2/css/select2.min.css' %}">
+<link href="{% static 'vendor/datatables/css/jquery.dataTables.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/style.css' %}" rel="stylesheet">
 <link href="{% static 'vendor/chartist/css/chartist.min.css' %}" rel="stylesheet">
+
 {% endblock %}
 
 {% block content %}
@@ -10,35 +13,24 @@
     <div class="card">
         <div class="card-body">
             <div class="row">
-                <div class="col-lg-5">
-                    Les techniques
-                    <select class="single-select-placeholder js-states" id="searchCondition1" >
+                <div class="col-lg-2">
+                    Type d'élement
+                    <select class="single-select-placeholder js-states" id="typeSearch">
                         <option value=""></option>
-                        {% for tech in lstTechniques %}
-                        <option value="{{ tech.techniqueCd }}">{{ tech.techniqueName }}</option>                       
-                        {% endfor %}
+                        <option value="TE">Technique</option>
+                        <option value="ST">Étudiant</option>
+                        <option value="GR">Groupe ou Classe</option>
                     </select>
                 </div>
-                <div class="col-lg-4">
-                    Les étudiants
-                    <select class="single-select-placeholder js-states" id="searchCondition2">
+                <div class="col-lg-7">
+                </br>
+                    <select class="single-select-placeholder js-states" id="searchCondition" >
                         <option value=""></option>
-                        {% for student in lstStudent %}
-                        <option value="{{ student.studentCd }}">{{ student.fullNameStudent }}</option>                       
-                        {% endfor %}
                     </select>
                 </div>
                 <div class="col-lg-3">
-                    Les groups/classe
-                    <select class="single-select-placeholder js-states" id="searchCondition3">
-                        <option value=""></option>
-                        {% for group in lstGroup %}
-                        <option value="{{ group.groupCd }}">{{ group.groupName }}</option>                       
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-lg-12">
-                    <button id ="btnSearch" type="button" class="btn btn-primary" style="float:right  ; margin-top:10px">
+                </br>
+                    <button id ="btnSearch" type="button" class="btn btn-primary" style="float:right  ;">
                         <i class="ti-search"></i>
                         &nbsp;Recherche
                     </button>
@@ -48,33 +40,15 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-5 col-sm-12">
+        <div class="col-lg-3 col-sm-12">
             <div class="card">
-                
                 <div class="stat-widget-one card-body">
-                    <div class="stat-icon d-inline-block" style="margin-top: 10px">
+                    <div class="stat-icon d-inline-block" >
                         <i class="ti-book text-success border-success"></i>
                     </div>
-                    <div class="stat-content d-inline-block" style="margin-left: 10px">
-                        <div class="stat-digit" style="font-size: 20px">Technique : {{lstTechniques|length}}</div>
-                        <div class="stat-text">※ La technique de concurrence mondiale : <span style="font-weight: bold; font-size: 15px">{{relationshipTech.hasGlobalConcurrency}}</span></div>
-                        <div class="stat-text">※ La technique de concurrence partielle : <span style="font-weight: bold; font-size: 15px">{{relationshipTech.hasPartialConcurrency}}</span></div>
-                        <div class="stat-text">※ la technique d'extension de la concurrence : <span style="font-weight: bold; font-size: 15px">{{relationshipTech.hasConcurrencyByExtension}}</span></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4 col-sm-12">
-            <div class="card">
-                <div class="stat-widget-one card-body">
-                    <div class="stat-icon d-inline-block" style="margin-top: 10px">
-                        <i class="ti-user text-primary border-primary"></i>
-                    </div>
-                    <div class="stat-content d-inline-block" style="margin-left: 10px">     
-                        <div class="stat-digit" style="font-size: 20px">Étudiants : {{lstStudent|length}}</div>
-                        <div class="stat-text">※ En cours : &nbsp; <span style="font-weight: bold; font-size: 15px;">{{relationshipStudent.enCours}}</span></div>
-                        <div class="stat-text">※ Acquis : &nbsp; <span style="font-weight: bold; font-size: 15px">{{relationshipStudent.Acquis}}</span></div>
-                        <div class="stat-text">※ Maîtrise : &nbsp; <span style="font-weight: bold; font-size: 15px">{{relationshipStudent.Maitrise}}</span></div>
+                    <div class="stat-content d-inline-block">
+                        <div class="stat-text" style="font-size: 22px">Technique</div>
+                        <div class="stat-digit" style="font-size: 18px">{{lstTechniques}}</div>
                     </div>
                 </div>
             </div>
@@ -82,12 +56,25 @@
         <div class="col-lg-3 col-sm-12">
             <div class="card">
                 <div class="stat-widget-one card-body">
-                    <div class="stat-icon d-inline-block" style="margin-top: 10px">
+                    <div class="stat-icon d-inline-block">
+                        <i class="ti-user text-primary border-primary"></i>
+                    </div>
+                    <div class="stat-content d-inline-block">  
+                        <div class="stat-text" style="font-size: 22px">Étudiants</div>   
+                        <div class="stat-digit" style="font-size: 18px">{{lstStudent}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-12">
+            <div class="card">
+                <div class="stat-widget-one card-body">
+                    <div class="stat-icon d-inline-block">
                         <i class="ti-layout-grid2 text-pink border-pink"></i>
                     </div>
-                    <div class="stat-content d-inline-block" style="margin-left: 10px">
-                        <div class="stat-digit" style="font-size: 20px">Classe : {{lstGroup|length}}</div>
-                        <div class="stat-digit" style="font-size: 20px">Group : {{lstGroup|length}}</div>
+                    <div class="stat-content d-inline-block">
+                        <div class="stat-digit" style="font-size: 20px">Classe : {{lstGroup}}</div>
+                        <div class="stat-digit" style="font-size: 20px">Group : {{lstGroup}}</div>
                     </div>
                 </div>
             </div>
@@ -96,20 +83,38 @@
 </div>
 
 <div class="col-lg-12" id="areaChart">
-    
 </div>
+<div class="modal fade" id="exampleModalCenter">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Sélectionner des technique</h5>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <select class="multi-select-placeholder js-states" multiple="multiple" id="searchTech">
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onClick="addTable()">Continuez</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock content %}
 {% block afterScript %}
 <script src="{% static 'vendor/select2/js/select2.full.min.js' %}"></script>
 <script src="{% static 'js/plugins-init/select2-init.js' %}"></script>
 <script src="{% static 'vendor/chartist/js/chartist.min.js' %}"></script>
+<script src="{% static 'vendor/chartist-plugin-tooltips/js/chartist-plugin-tooltip.min.js' %}"></script>
 <script src="{% static 'vendor/moment/moment.min.js' %}"></script>
+<script src="{% static 'vendor/datatables/js/jquery.dataTables.min.js' %}"></script>
 <script src="{% static 'vendor/raphael/raphael.min.js' %}"></script>
 <script src="{% static 'vendor/morris/morris.min.js' %}"></script>
-
-
-<script type="text/javascript">
-
+<script type="text/javascript"> 
     function getCookie(name) {
         let cookieValue = null;
         if (document.cookie && document.cookie !== '') {
@@ -128,130 +133,755 @@
 
     const csrftoken = getCookie('csrftoken');
 
-    $(document).ready(function() {
-       $("#btnSearch").click(function(){
-           searchCondition1 = $("#searchCondition1").val()
-           searchCondition2 = $("#searchCondition2").val()
-           searchCondition3 = $("#searchCondition3").val()
-         
-           url = window.location.href
+    function addChartTechnique(param){
+        divAreaChart = $("#areaChart")
+        // add bar chart html 
+        divMainBarChart = $("<div/>")
+        divMainBarChart.attr("class","ct-bar-chart mt-5")
+        divMainBarChart.attr("id", "barChart" + param["code"])
+        divMainBarChart.attr('style', 'margin-top: 0px !important');
+
+        divNoteMaitriseSquareImg = $("<div/>")
+        divNoteMaitriseSquareImg.css("height","12px")
+        divNoteMaitriseSquareImg.css("width","12px")
+        divNoteMaitriseSquareImg.css("margin-top","4px")
+        divNoteMaitriseSquareImg.css("background-color","#2451ff")
+
+        divBeforeNoteSquareMaitrise = $("<div/>")
+        divBeforeNoteSquareMaitrise.attr("col-lg-1")
+        divBeforeNoteSquareMaitrise.append(divNoteMaitriseSquareImg)
+
+        divNoteMaitriseSquareTxt = $("<span/>")
+        divNoteMaitriseSquareTxt.text("Maîtrise")
+        divNoteMaitriseSquareTxt.attr("class","col-lg-2")
+
+        divNoteAcquiSquareImg = $("<div/>")
+        divNoteAcquiSquareImg.css("height","12px")
+        divNoteAcquiSquareImg.css("width","12px")
+        divNoteAcquiSquareImg.css("margin-top","4px")
+        divNoteAcquiSquareImg.css("background-color","#2bff00")
+
+        divBeforeNoteSquareAcquis = $("<div/>")
+        divBeforeNoteSquareAcquis.attr("col-lg-1")
+        divBeforeNoteSquareAcquis.append(divNoteAcquiSquareImg)
+
+        divNoteAcquiSquareTxt = $("<span/>")
+        divNoteAcquiSquareTxt.text("Acquis")
+        divNoteAcquiSquareTxt.attr("class","col-lg-2")
+
+        divNoteEnCourSquareImg = $("<div/>")
+        divNoteEnCourSquareImg.css("height","12px")
+        divNoteEnCourSquareImg.css("width","12px")
+        divNoteEnCourSquareImg.css("margin-top","4px")
+        divNoteEnCourSquareImg.css("background-color","#ff0000")
+
+        divBeforeNoteSquareEncour = $("<div/>")
+        divBeforeNoteSquareEncour.attr("col-lg-1")
+        divBeforeNoteSquareEncour.append(divNoteEnCourSquareImg)
+
+        divNoteEnCourSquareTxt = $("<span/>")
+        divNoteEnCourSquareTxt.text("En cours")
+        divNoteEnCourSquareTxt.attr("class","col-lg-2")
+
+        divNoteBarChart = $("<div/>")
+        divNoteBarChart.attr("class","row")
+        divNoteBarChart.css("margin-left","20px")
+        divNoteBarChart.append(divBeforeNoteSquareMaitrise)
+        divNoteBarChart.append(divNoteMaitriseSquareTxt)
+        divNoteBarChart.append(divBeforeNoteSquareAcquis)
+        divNoteBarChart.append(divNoteAcquiSquareTxt)
+        divNoteBarChart.append(divBeforeNoteSquareEncour)
+        divNoteBarChart.append(divNoteEnCourSquareTxt)
+
+        divCardBodyBarChart = $("<div/>")
+        divCardBodyBarChart.attr("class","card-body")
+        divCardBodyBarChart.append(divMainBarChart)
+        divCardBodyBarChart.append(divNoteBarChart)
+
+        divTitleBarChart = $("<div/>")
+        type = ""
+        switch(param["type"]){
+            case "TE" : type = "Technique "; break; 
+            case "ST" : type = "Étudiant "; break; 
+            case "GR" : type = "Groupe " ; break; 
+        }
+
+        divTypeTitle = $("<span/>")
+        divTypeTitle.text("Un graphique de " + type )
+        divTypeTitle.attr("class", "badge badge-pill badge-warning")
+        divTitleBarChart.append(divTypeTitle)
+
+        divH4BarChart = $("<div/>")
+        divH4BarChart.text(param["name"] )
+        divH4BarChart.attr("class","card-title")
+        divH4BarChart.css("padding","10px 0px 0px 10px")
+        divTitleBarChart.append(divH4BarChart)
+
+        divHeaderBarChart = $("<div/>")
+        divHeaderBarChart.attr("class","card-header")
+        divHeaderBarChart.append(divTitleBarChart)
+
+        divCardBarChart = $("<div/>")
+        divCardBarChart.attr("class","card")
+        divCardBarChart.append(divHeaderBarChart)
+        divCardBarChart.append(divCardBodyBarChart)
+
+        divColBarChart = $("<div/>")
+        divColBarChart.attr("class","col-lg-9")
+        divColBarChart.append(divCardBarChart)
         
-           $.ajax({
-                url : url,
-                type : 'POST',
-                data : {
-                    searchCondition1 : searchCondition1,
-                    searchCondition2 : searchCondition2,
-                    searchCondition3 : searchCondition3,
-                    csrfmiddlewaretoken : '{{ csrf_token }}'        
-                },
-                success : function(response) {                      
-                    if(response["response"] != false){
-                        console.log(response)
-                    
-                        divAreaChart = $("#areaChart")
-                        divAreaChart.empty()
-    
-                        // add bar chart html 
-                        divMainBarChart = $("<div/>")
-                        divMainBarChart.attr("class","ct-bar-chart mt-5")
-    
-                        divCardBodyBarChart = $("<div/>")
-                        divCardBodyBarChart.attr("class","card-body")
-                        divCardBodyBarChart.append(divMainBarChart)
-    
-                        divCardBarChart = $("<div/>")
-                        divCardBarChart.attr("class","card")
-                        divCardBarChart.append(divCardBodyBarChart)
-    
-                        divColBarChart = $("<div/>")
-                        divColBarChart.attr("class","col-lg-9")
-                        divColBarChart.append(divCardBarChart)
-                        
-                        // add pie chart html 
-                        divMainPieChart = $("<div/>")
-                        divMainPieChart.attr("id","ct-pie-chart")
-    
-                        divCardBodyPieChart = $("<div/>")
-                        divCardBodyPieChart.attr("class","card-body")
-                        divCardBodyPieChart.append(divMainPieChart)
-    
-                        divCardPieChart = $("<div/>")
-                        divCardPieChart.attr("class","card")
-                        divCardPieChart.append(divCardBodyPieChart)
-    
-                        divColPieChart = $("<div/>")
-                        divColPieChart.attr("class","col-lg-3")
-                        divColPieChart.append(divCardPieChart)
-    
-                        // add bar and pie chart to row 
-                        divRow = $("<div/>")
-                        divRow.attr("class","row")
-                        divRow.append(divColBarChart)
-                        divRow.append(divColPieChart)
-    
-                        divCardBodyParent = $("<div/>")
-                        divCardBodyParent.attr("class","card-body")
-                        divCardBodyParent.append(divRow)
-    
-                        divCardParent = $("<div/>")
-                        divCardParent.attr("class","card")
-                        divCardParent.append(divCardBodyParent)
-                        divAreaChart.append(divCardParent)
+        // add pie chart html 
+        divMainPieChart = $("<div/>")
+        divMainPieChart.attr("class","ct-pie-chart")
+        divMainPieChart.attr("id","pieChart" + param["code"])
 
-                        //pie chart 
-                        Morris.Donut({
-                            element: 'ct-pie-chart',
-                            data: [{
-                                label: "\xa0 \xa0 En cours \xa0 \xa0",
-                                value: response["response"]["pieChart"][0],
-                    
-                            }, {
-                                label: "\xa0 \xa0 Acquis \xa0 \xa0",
-                                value: response["response"]["pieChart"][1]
-                            }, {
-                                label: "\xa0 \xa0 Maîtrise \xa0 \xa0",
-                                value: response["response"]["pieChart"][2]
-                            }],
-                            resize: true,
-                            colors: ['#75B432', 'rgb(192, 10, 39)', '#4400eb']
-                        });
+        divCardBodyPieChart = $("<div/>")
+        divCardBodyPieChart.attr("class","card-body")
+        divCardBodyPieChart.append(divMainPieChart)
 
-                        var data = {
-                            labels:  response["response"]["barChart"][1],
-                            series: [
-                                response["response"]["barChart"][2],
-                                response["response"]["barChart"][3],
-                                response["response"]["barChart"][4],
-                            ]
-                        };
+        divCardPieChart = $("<div/>")
+        divCardPieChart.attr("class","card")
+        divCardPieChart.append(divCardBodyPieChart)
+
+        divColPieChart = $("<div/>")
+        divColPieChart.attr("class","col-lg-3")
+        divColPieChart.append(divCardPieChart)
+
+        // add bar and pie chart to row 
+        divRow = $("<div/>")
+        divRow.attr("class","row")
+        divRow.append(divColBarChart)
+        divRow.append(divColPieChart)
+
+        divCardBodyParent = $("<div/>")
+        divCardBodyParent.attr("class","card-body")
+        divCardBodyParent.append(divRow)
+
+        divCardParent = $("<div/>")
+        divCardParent.attr("class","card")
+        divCardParent.append(divCardBodyParent)
+        divAreaChart.append(divCardParent)
+
+        //pie chart 
+        Morris.Donut({
+            element: "pieChart" + param["code"],
+            data: [{
+                label: "\xa0 \xa0 En cours \xa0 \xa0",
+                value: param["pieChart"][0],
+    
+            }, {
+                label: "\xa0 \xa0 Acquis \xa0 \xa0",
+                value: param["pieChart"][1]
+            }, {
+                label: "\xa0 \xa0 Maîtrise \xa0 \xa0",
+                value: param["pieChart"][2]
+            }],
+            resize: true,
+            colors: ['#ff0000', '#2bff00', '#2451ff']
+        });
+        var data = {
+            labels:  param["barChart"][1],
+            series: [
+                param["barChart"][2],
+                param["barChart"][3],
+                param["barChart"][4],
+            ]
+        };
+    
+        var options = {
+            // Default mobile configuration
+            stackBars: true,
+            axisX: {
+              labelInterpolationFnc: function(value) {
+                return value.split(/\s+/).map(function(word) {
+                  return word[0];
+                }).join('');
+              }
+            },
+            axisY: {
+                onlyInteger: true,
+            },
+            plugins: [
+              Chartist.plugins.tooltip()
+            ]
+        };
+    
+        var responsiveOptions = [
+        // Options override for media > 400px
+        ['screen and (min-width: 400px)', {
+          reverseData: true,
+          horizontalBars: true,
+          axisX: {
+            labelInterpolationFnc: Chartist.noop
+          },
+          axisY: {
+            offset: 60
+          }
+        }],
+        // Options override for media > 800px
+        ['screen and (min-width: 800px)', {
+          stackBars: false,
+          seriesBarDistance: 10
+        }],
+        // Options override for media > 1000px
+        ['screen and (min-width: 1000px)', {
+          reverseData: false,
+          horizontalBars: false,
+          seriesBarDistance: 15
+        }]
+      ];
+    
+        chart = new Chartist.Bar('.ct-bar-chart', data, options, responsiveOptions);
+    }
+
+    function addChartEtudiant(param){
+        th1 = $("<th/>")
+        th1.text("Nom du technique")
+
+        th2 = $("<th/>")
+        th2.text("Niveau")
+
+        tr = $("<tr/>")
+        tr.append(th1)
+        tr.append(th2)
+
+        theader = $("<thead/>")
+        theader.attr("style","background-color: #fbab14; font-size: 18px;")
+        theader.append(tr)
+
+        divTable = $("<table/>")
+        divTable.attr("id","tblStudent")
+        divTable.attr("class","display")
+        divTable.attr("style","width:100%")
+        divTable.append(theader)
+
+        divTableReponsive = $("<div/>")
+        divTableReponsive.attr("class","table-responsive")
+        divTableReponsive.attr("style","max-height: 400px !important;")
+        divTableReponsive.append(divTable)
+
+        divCardBodyTable = $("<div/>")
+        divCardBodyTable.attr("class","card-body")
+        divCardBodyTable.append(divTableReponsive)
+
+        divTitleTable = $("<div/>")
+        type = ""
+        switch(param["type"]){
+            case "TE" : type = "Technique "; break; 
+            case "ST" : type = "Étudiant "; break; 
+            case "GR" : type = "Groupe " ; break; 
+        }
+
+        divTypeTitle = $("<span/>")
+        divTypeTitle.text("Un graphique de " + type )
+        divTypeTitle.attr("class", "badge badge-pill badge-warning")
+        divTitleTable.append(divTypeTitle)
+
+        divH4Table = $("<div/>")
+        divH4Table.text(param["name"] )
+        divH4Table.attr("class","card-title")
+        divH4Table.css("padding","10px 0px 0px 10px")
+        divTitleTable.append(divH4Table)
+
+        divHeaderTable = $("<div/>")
+        divHeaderTable.attr("class","card-header")
+        divHeaderTable.append(divTitleTable)
+
+        divCardTable = $("<div/>")
+        divCardTable.attr("class","card")
+        divCardTable.append(divHeaderTable)
+        divCardTable.append(divCardBodyTable) 
+
+        divColTable = $("<div/>")
+        divColTable.attr("class","col-lg-9")
+        divColTable.append(divCardTable)
+
+        // add pie chart html 
+        divMainPieChart = $("<div/>")
+        divMainPieChart.attr("class","ct-pie-chart")
+        divMainPieChart.attr("id","pieChart" + param["code"])
+
+        divCardBodyPieChart = $("<div/>")
+        divCardBodyPieChart.attr("class","card-body")
+        divCardBodyPieChart.append(divMainPieChart)
+
+        divCardPieChart = $("<div/>")
+        divCardPieChart.attr("class","card")
+        divCardPieChart.append(divCardBodyPieChart)
+
+        divColPieChart = $("<div/>")
+        divColPieChart.attr("class","col-lg-3")
+        divColPieChart.append(divCardPieChart)
+
+        // add bar and pie chart to row 
+        divRow = $("<div/>")
+        divRow.attr("class","row")
+        divRow.append(divColTable)
+        divRow.append(divColPieChart)
+
+        divCardBodyParent = $("<div/>")
+        divCardBodyParent.attr("class","card-body")
+        divCardBodyParent.append(divRow)
+
+        divCardParent = $("<div/>")
+        divCardParent.attr("class","card")
+        divCardParent.append(divCardBodyParent)
+        divAreaChart.append(divCardParent)
+
+        //datatable
+        var table2 = $('#tblStudent').DataTable( {
+            "data" : param["datatable"],
+            "searching": false,
+            "paging": false,
+            "info": false,
+            "columns": [
+                { "data": "techName" },
+                { "data": "level", render: function (data, type, row) {
+                    if( data == "L1") {
+                        return "<span class=\"badge badge-pill \" style=\"background-color: #ff0000; color: white\">En cours</span>"
+                    }
+                    if( data == "L2") {
+                        return "<span class=\"badge badge-pill \" style=\"background-color: #2bff00; color: white\">Acquis</span>"
+                    }
+                    if( data =="L3") {
+                        return "<span class=\"badge badge-pill \" style=\"background-color: #2451ff; color: white\">Maîtrise</span>"
+                    }
+                } }
+            ]
+        });
+
+        //pie chart 
+        Morris.Donut({
+        element: "pieChart" + param["code"],
+        data: [{
+            label: "\xa0 \xa0 En cours \xa0 \xa0",
+            value: param["pieChart"][0],
+
+        }, {
+            label: "\xa0 \xa0 Acquis \xa0 \xa0",
+            value: param["pieChart"][1]
+        }, {
+            label: "\xa0 \xa0 Maîtrise \xa0 \xa0",
+            value: param["pieChart"][2]
+        }],
+        resize: true,
+        colors: ['#ff0000', '#2bff00', '#2451ff']
+        });
+    }
+
+    function addChartGroupe(param){
+        divAreaChart = $("#areaChart")
+        // add bar chart html 
+        divMainBarChart = $("<div/>")
+        divMainBarChart.attr("class","ct-bar-chart mt-5")
+        divMainBarChart.attr("id", "barChart" + param["code"])
+        divMainBarChart.attr('style', 'margin-top: 0px !important');
+
+        divNoteMaitriseSquareImg = $("<div/>")
+        divNoteMaitriseSquareImg.css("height","12px")
+        divNoteMaitriseSquareImg.css("width","12px")
+        divNoteMaitriseSquareImg.css("margin-top","4px")
+        divNoteMaitriseSquareImg.css("background-color","#2451ff")
+
+        divBeforeNoteSquareMaitrise = $("<div/>")
+        divBeforeNoteSquareMaitrise.attr("col-lg-1")
+        divBeforeNoteSquareMaitrise.append(divNoteMaitriseSquareImg)
+
+        divNoteMaitriseSquareTxt = $("<span/>")
+        divNoteMaitriseSquareTxt.text("Maîtrise")
+        divNoteMaitriseSquareTxt.attr("class","col-lg-2")
+
+        divNoteAcquiSquareImg = $("<div/>")
+        divNoteAcquiSquareImg.css("height","12px")
+        divNoteAcquiSquareImg.css("width","12px")
+        divNoteAcquiSquareImg.css("margin-top","4px")
+        divNoteAcquiSquareImg.css("background-color","#2bff00")
+
+        divBeforeNoteSquareAcquis = $("<div/>")
+        divBeforeNoteSquareAcquis.attr("col-lg-1")
+        divBeforeNoteSquareAcquis.append(divNoteAcquiSquareImg)
+
+        divNoteAcquiSquareTxt = $("<span/>")
+        divNoteAcquiSquareTxt.text("Acquis")
+        divNoteAcquiSquareTxt.attr("class","col-lg-2")
+
+        divNoteEnCourSquareImg = $("<div/>")
+        divNoteEnCourSquareImg.css("height","12px")
+        divNoteEnCourSquareImg.css("width","12px")
+        divNoteEnCourSquareImg.css("margin-top","4px")
+        divNoteEnCourSquareImg.css("background-color","#ff0000")
+
+        divBeforeNoteSquareEncour = $("<div/>")
+        divBeforeNoteSquareEncour.attr("col-lg-1")
+        divBeforeNoteSquareEncour.append(divNoteEnCourSquareImg)
+
+        divNoteEnCourSquareTxt = $("<span/>")
+        divNoteEnCourSquareTxt.text("En cours")
+        divNoteEnCourSquareTxt.attr("class","col-lg-2")
+
+        divNoteBarChart = $("<div/>")
+        divNoteBarChart.attr("class","row")
+        divNoteBarChart.css("margin-left","20px")
+        divNoteBarChart.append(divBeforeNoteSquareMaitrise)
+        divNoteBarChart.append(divNoteMaitriseSquareTxt)
+        divNoteBarChart.append(divBeforeNoteSquareAcquis)
+        divNoteBarChart.append(divNoteAcquiSquareTxt)
+        divNoteBarChart.append(divBeforeNoteSquareEncour)
+        divNoteBarChart.append(divNoteEnCourSquareTxt)
+
+        divCardBodyBarChart = $("<div/>")
+        divCardBodyBarChart.attr("class","card-body")
+        divCardBodyBarChart.append(divMainBarChart)
+        divCardBodyBarChart.append(divNoteBarChart)
+
+        divTitleBarChart = $("<div/>")
+        type = ""
+        switch(param["type"]){
+            case "TE" : type = "Technique "; break; 
+            case "ST" : type = "Étudiant "; break; 
+            case "GR" : type = "Groupe " ; break; 
+        }
+
+        divTypeTitle = $("<span/>")
+        divTypeTitle.text("Un graphique de " + type )
+        divTypeTitle.attr("class", "badge badge-pill badge-warning")
+        divTitleBarChart.append(divTypeTitle)
+        
+        btnShowTable = $("<button/>")
+        btnShowTable.attr("type","button")
+        btnShowTable.attr("class","btn btn-rounded btn-info")
+        btnShowTable.attr("id","btnShowTable")
+        btnShowTable.attr("onClick","showSelectTech(\"" + param["code"] + "\")")
+        btnShowTable.attr("style","margin-left: 10px")
+        btnShowTable.text("Visualiser les données")
+        divTitleBarChart.append(btnShowTable)
+
+        divH4BarChart = $("<div/>")
+        divH4BarChart.text(param["name"] )
+        divH4BarChart.attr("class","card-title")
+        divH4BarChart.css("padding","10px 0px 0px 10px")
+        divTitleBarChart.append(divH4BarChart)
+
+        divHeaderBarChart = $("<div/>")
+        divHeaderBarChart.attr("class","card-header")
+        divHeaderBarChart.append(divTitleBarChart)
+
+        divCardBarChart = $("<div/>")
+        divCardBarChart.attr("class","card")
+        divCardBarChart.append(divHeaderBarChart)
+        divCardBarChart.append(divCardBodyBarChart)
+
+        divColBarChart = $("<div/>")
+        divColBarChart.attr("class","col-lg-9")
+        divColBarChart.append(divCardBarChart)
+        
+        // add pie chart html 
+        divMainPieChart = $("<div/>")
+        divMainPieChart.attr("class","ct-pie-chart")
+        divMainPieChart.attr("id","pieChart" + param["code"])
+
+        divCardBodyPieChart = $("<div/>")
+        divCardBodyPieChart.attr("class","card-body")
+        divCardBodyPieChart.append(divMainPieChart)
+
+        divCardFooterPieChart = $("<div/>")
+        divCardFooterPieChart.attr("class","card-footer")
+        divCardFooterPieChart.text("(le technique de la groupe a été en cours, acquis ou maîtrise quand les étudiants de la groupe appartient du technique sont plus grand que 80% sur total)")
+
+        divCardPieChart = $("<div/>")
+        divCardPieChart.attr("class","card")
+        divCardPieChart.append(divCardBodyPieChart)
+        divCardPieChart.append(divCardFooterPieChart)
+        
+
+        divColPieChart = $("<div/>")
+        divColPieChart.attr("class","col-lg-3")
+        divColPieChart.append(divCardPieChart)
+
+        // add bar and pie chart to row 
+        divRow = $("<div/>")
+        divRow.attr("class","row")
+        divRow.append(divColBarChart)
+        divRow.append(divColPieChart)
+
+        divCardBodyParent = $("<div/>")
+        divCardBodyParent.attr("class","card-body")
+        divCardBodyParent.append(divRow)
+
+        divCardParent = $("<div/>")
+        divCardParent.attr("class","card")
+        divCardParent.append(divCardBodyParent)
+        divAreaChart.append(divCardParent)
+
+        //pie chart 
+        Morris.Donut({
+            element: "pieChart" + param["code"],
+            data: [{
+                label: "\xa0 \xa0 En cours \xa0 \xa0",
+                value: param["pieChart"][0],
+    
+            }, {
+                label: "\xa0 \xa0 Acquis \xa0 \xa0",
+                value: param["pieChart"][1]
+            }, {
+                label: "\xa0 \xa0 Maîtrise \xa0 \xa0",
+                value: param["pieChart"][2]
+            }],
+            resize: true,
+            colors: ['#ff0000', '#2bff00', '#2451ff']
+        });
+
+        var data = {
+            labels:  param["barChart"][0],
+            series: [
+                param["barChart"][2],
+                param["barChart"][3],
+                param["barChart"][4],
+            ]
+        };
+    
+        var options = {
+            // Default mobile configuration
+            stackBars: true,
+            axisX: {
+              labelInterpolationFnc: function(value) {
+                return value.split(/\s+/).map(function(word) {
+                  return word[0];
+                }).join('');
+              }
+            },
+            axisY: {
+                onlyInteger: true,
+            },
+            plugins: [
+              Chartist.plugins.tooltip()
+            ]
+        };
+    
+        var responsiveOptions = [
+        // Options override for media > 400px
+        ['screen and (min-width: 400px)', {
+          reverseData: true,
+          horizontalBars: true,
+          axisX: {
+            labelInterpolationFnc: Chartist.noop
+          },
+          axisY: {
+            offset: 60
+          }
+        }],
+        // Options override for media > 800px
+        ['screen and (min-width: 800px)', {
+          stackBars: false,
+          seriesBarDistance: 10
+        }],
+        // Options override for media > 1000px
+        ['screen and (min-width: 1000px)', {
+          reverseData: false,
+          horizontalBars: false,
+          seriesBarDistance: 15
+        }]
+      ];
+    
+        chart = new Chartist.Bar('.ct-bar-chart', data, options, responsiveOptions);
+    }
+
+    function showSelectTech(idGroupe){
+        $.ajax({
+            url : window.location.href,
+            type : 'POST',
+            data : {
+                typeSearch : "STech",
+                idGroupe : idGroupe
+            },
+            success : function(response) {     
+                console.log(response)
+                $("#searchTech").empty()
+                for(let i = 0; i < response["response"][0].length; i++){
+                    var o = new Option(response["response"][0][i] + " - " + response["response"][1][i] , response["response"][0][i] );
                     
-                        var options = {
-                            seriesBarDistance: 10
-                        };
-                    
-                        var responsiveOptions = [
-                            ['screen and (max-width: 640px)', {
-                                seriesBarDistance: 5,
-                                axisX: {
-                                    labelInterpolationFnc: function(value) {
-                                        return value[0];
-                                    }
-                                }
-                            }]
-                        ];
-                    
-                        new Chartist.Bar('.ct-bar-chart', data, options, responsiveOptions);
-                    }       
-                    
-                },
-                error : function(request,error)
-                {
-                    alert("Request: "+JSON.stringify(request));
+                    $("#searchTech").append(o);
+                }             
+                $("#exampleModalCenter").modal("show")    
+            },
+            error : function(request,error)
+            {
+                alert("Request: "+JSON.stringify(request));
+            }
+        });
+    }
+
+    function addTable(){
+        $.ajax({
+            url : window.location.href,
+            type : 'POST',
+            data : {
+                typeSearch : "STable",
+                idGroupe : $("#searchCondition").val(),
+                idTech : $("#searchTech").val().toString()
+            },
+            success : function(response) {  
+                $("#exampleModalCenter").modal("toggle")   
+                $("#areaTable").empty()
+                $("#areaTable").remove()
+                parent = $("#areaChart")
+
+                th1 = $("<th/>")
+                th1.text("Code d'étudiant")
+
+                th2 = $("<th/>")
+                th2.text("Nom d'étudiant")
+
+                tr = $("<tr/>")
+                tr.append(th1)
+                tr.append(th2)
+
+                tmp = $("#searchTech").val()
+                for(let i = 0; i < tmp.length; i++){
+                    th3 = $("<th/>")
+                    th3.text(tmp[i])
+                    tr.append(th3)
                 }
-            });
+                
+
+                theader = $("<thead/>")
+                theader.append(tr)
+
+                divTable = $("<table/>")
+                divTable.attr("id","tblGroupe")
+                divTable.attr("class","display")
+                divTable.attr("style","width:100%")
+                divTable.append(theader)
+
+                divTableReponsive = $("<div/>")
+                divTableReponsive.attr("class","table-responsive")
+                //divTableReponsive.attr("style","max-height: 400px !important;")
+                divTableReponsive.append(divTable)
+
+                divCardBodyTable = $("<div/>")
+                divCardBodyTable.attr("class","card-body")
+                divCardBodyTable.append(divTableReponsive)
+
+                divCard = $("<div/>")
+                divCard.attr("class","card")
+                divCard.attr("id","areaTable")
+                divCard.append(divCardBodyTable)
+
+
+                parent.append(divCard)
+
+                var table = $('#tblGroupe').DataTable({
+                    data: response["response"],
+                    createdRow: function ( row, data, index ) {
+                        $(row).addClass('selected')
+                    }
+                    
+                });
+                
+                table.on('click', 'tbody tr', function() {
+                var $row = table.row(this).nodes().to$();
+                var hasClass = $row.hasClass('selected');
+                if (hasClass) {
+                    $row.removeClass('selected')
+                } else {
+                    $row.addClass('selected')
+                }
+                })
+                
+                table.rows().every(function() {
+                    this.nodes().to$().removeClass('selected')
+                });
+               
+            },
+            error : function(request,error)
+            {
+                alert("Request: "+JSON.stringify(request));
+            }
+        });
+        
+    }
+
+    $(document).ready(function() {
+
+        $("#btnSearch").click(function(){
+            searchCondition = $("#searchCondition").val()
+         
+            url = window.location.href
+            if (searchCondition != ""){
+                $.ajax({
+                    url : url,
+                    type : 'POST',
+                    data : {
+                        searchCondition : searchCondition,
+                        typeSearch : $("#typeSearch").val(),
+                        csrfmiddlewaretoken : '{{ csrf_token }}'        
+                    },
+                    success : function(response) {                      
+                        if(response["response"] != false){       
+                            divAreaChart = $("#areaChart")
+                            divAreaChart.empty()
+                            console.log(response["response"])
+                            if( response["response"]["type"] == "TE"){
+                                addChartTechnique(response["response"]) 
+                                addChartEtudiant
+                            }
+                            if( response["response"]["type"] == "ST"){
+                                addChartEtudiant(response["response"]) 
+                            }
+                            if( response["response"]["type"] == "GR"){
+                                addChartGroupe(response["response"])
+                            }
+
+                        }       
+                        
+                    },
+                    error : function(request,error)
+                    {
+                        alert("Request: "+JSON.stringify(request));
+                    }
+                });
+            }      
        })
 
+        $("#typeSearch").change(function(){
+            let type = $("#typeSearch").val()
+            if(type != ""){
+                $.ajax({
+                    url : "{% url 'getData' %}",
+                    type : 'GET',
+                    data : {
+                        type : type,
+                        csrfmiddlewaretoken : '{{ csrf_token }}'        
+                    },
+                    success : function(response) {     
+                        $("#searchCondition").show()
+                        var selectBtn = $("#searchCondition").empty()
+                        for(let i = 0; i < response["data"].length; i++){
+                            if(type == "TE"){
+                                var o = new Option(response["data"][i]["techniqueName"], response["data"][i]["techniqueCd"]);
+                            }
+                            else if(type == "ST"){
+                                var o = new Option(response["data"][i]["fullNameStudent"], response["data"][i]["studentCd"]);
+                            }
+                            else {
+                                var o = new Option(response["data"][i]["groupName"], response["data"][i]["groupCd"]);
+                            }
+                            
+                            $("#searchCondition").append(o);
+                        }                 
+                    },
+                    error : function(request,error)
+                    {
+                        alert("Request: "+JSON.stringify(request));
+                    }
+                });
+            }
+            else {
+                $("#searchCondition").empty()
+                $("#searchCondition").hide()
+            }
+           
+        })
     });
 </script>
 {% endblock afterScript%}
