@@ -13,6 +13,9 @@
                 {% csrf_token %}
                 <div class="row">
                     <div class="input-group mb-12 col-lg-12">
+                        <div class="input-group-prepend">
+                            <button type="submit" class="btn btn-warning">Télécharger Template</button>
+                        </div>
                         <div class="custom-file">
                             <label class="custom-file-label" id="fileName">Sélectionnez du fichier ... </label>
                             <input type="file" class="custom-file-input" accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" id="inputFile" name="myfile">                        
